@@ -1,20 +1,27 @@
 plugins {
     base
-    id("org.jetbrains.kotlin.jvm") version "1.4.0"
+    kotlin("jvm") version "1.4.0"
 }
 
-group = "silentorb.metahub"
-version = "1.0-SNAPSHOT"
+allprojects {
+    group = "silentorb.metahub"
+    version = "1.0"
 
-repositories {
-    mavenCentral()
-    jcenter()
+    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+        kotlinOptions.jvmTarget = "1.8"
+    }
+
+    repositories {
+        jcenter()
+        mavenCentral()
+    }
 }
 
-dependencies {
-    implementation(kotlin("stdlib-jdk8"))
-    testImplementation("io.ktor:ktor-client-cio:1.4.0")
-    implementation("io.ktor:ktor-server-cio:1.4.0")
-    testImplementation("org.junit.jupiter:junit-jupiter:5.6.2")
-    testImplementation("io.ktor:ktor-server-test-host:1.4.0")
+subprojects {
+    apply(plugin = "org.jetbrains.kotlin.jvm")
+
+    dependencies {
+        val implementation by configurations
+        implementation(kotlin("stdlib-jdk8"))
+    }
 }

@@ -1,0 +1,4 @@
+---
+name: Ogre
+is: creature
+---
