@@ -1,3 +1,6 @@
+
+includeBuild("../imp")
+
 fun scanProjects(action: (String, String) -> Unit): (java.nio.file.Path) -> Unit = { path ->
     val name = path.toFile().name
     val currentPath = path.toFile().path.replace("\\", "/")
