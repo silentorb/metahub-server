@@ -5,7 +5,6 @@ import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
 import silentorb.metahub.database.Database
-import silentorb.metahub.database.getQueryJsonObjectMapper
 import silentorb.metahub.database.query
 import silentorb.metahub.serialization.parseJson
 import silentorb.metahub.serialization.toJson
@@ -17,7 +16,7 @@ fun Application.metahubApi(database: Database) {
     }
 
     post("/read") {
-      val request = parseJson<ReadRequest>(getQueryJsonObjectMapper(), call.receiveStream())
+      val request = parseJson<ReadRequest>(call.receiveStream())
       val responseData = request.queries.mapValues { query(database, it.value) }
       call.respondText(toJson(ReadResponse(data = responseData)))
     }
