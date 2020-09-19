@@ -42,13 +42,13 @@ class ApiTest {
     with(handleRequest(HttpMethod.Post, "/read") {
         setBody(
             queryBody(
-                "let output = all"
+                "let output = all.expand"
             )
         )
     }) {
       assertEquals(HttpStatusCode.OK, response.status())
       val readResponse = parseJson<ReadResponse>(this.response.content!!)
-      assertThat(readResponse.data["data"]!!.entries.size, greaterThanOrEqualTo(2))
+      assertThat(readResponse.data["data"]!!.entries.size, greaterThanOrEqualTo(3))
     }
   }
 
@@ -58,13 +58,16 @@ class ApiTest {
     with(handleRequest(HttpMethod.Post, "/read") {
         setBody(
             queryBody(
-                "let output = all.filter hasRelationship \"is\""
+//                "let output = all.filter hasRelationship \"is\" .expand"
+                "let output = expand (filter all (hasRelationship \"is\"))"
             )
         )
     }) {
       assertEquals(HttpStatusCode.OK, response.status())
       val readResponse = parseJson<ReadResponse>(this.response.content!!)
-      assertThat(readResponse.data["data"]!!.entries.size, greaterThanOrEqualTo(2))
+      val data = readResponse.data["data"]!!
+      assertEquals(2, data.entries.size)
+      assertEquals("Ogre", data["ogre"]!!["name"])
     }
   }
 }
